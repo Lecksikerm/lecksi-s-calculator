@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lecksi's Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0f1115;
+            color: #fff;
+        }
+
+        .calc {
+            width: 320px;
+            background: #1a2231;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .4);
+        }
+
+        .screen {
+            background: #0c0f14;
+            padding: 20px;
+            text-align: right;
+            font-size: 2rem;
+            min-height: 70px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            color: #fff;
+            overflow-x: auto;
+        }
+
+        .keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: #161a22;
+        }
+
+        button {
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: #fff;
+            background: #2a3242;
+            transition: 0.15s;
+        }
+
+        button:hover {
+            filter: brightness(1.15);
+        }
+
+        .op {
+            background: #2663ff;
+        }
+
+        .eq {
+            background: #ffb703;
+            color: #000;
+            grid-column: span 2;
+        }
+
+        .wide {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calc">
+        <div id="screen" class="screen">0</div>
+        <div class="keys">
+            <button class="op" data-action="clear">AC</button>
+            <button class="op" data-action="sign">±</button>
+            <button class="op" data-action="percent">%</button>
+            <button class="op" data-value="/">÷</button>
+
+            <button data-value="7">7</button>
+            <button data-value="8">8</button>
+            <button data-value="9">9</button>
+            <button class="op" data-value="*">×</button>
+
+            <button data-value="4">4</button>
+            <button data-value="5">5</button>
+            <button data-value="6">6</button>
+            <button class="op" data-value="-">−</button>
+
+            <button data-value="1">1</button>
+            <button data-value="2">2</button>
+            <button data-value="3">3</button>
+            <button class="op" data-value="+">+</button>
+
+            <button class="wide" data-value="0">0</button>
+            <button data-value=".">.</button>
+            <button class="eq" data-action="equals">=</button>
+        </div>
+    </div>
+
+    <script>
+        const screen = document.getElementById("screen");
+        let current = "0";
+
+        document.querySelectorAll("button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const val = btn.dataset.value;
+                const action = btn.dataset.action;
+
+                if (val) { // number or operator
+                    if (current === "0" && !isNaN(val)) current = val;
+                    else current += val;
+                }
+                else if (action) {
+                    if (action === "clear") current = "0";
+                    if (action === "sign") current = String(eval(current + "*-1"));
+                    if (action === "percent") current = String(eval(current + "/100"));
+                    if (action === "equals") {
+                        try { current = String(eval(current)); }
+                        catch { current = "Error"; }
+                    }
+                }
+
+                screen.textContent = current;
+            });
+        });
+    </script>
+</body>
+
+</html>
